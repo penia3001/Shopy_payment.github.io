@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ödeme Geçmişi</title>
+    <style>
+        body {
+            font-family: 'San Francisco', Arial, sans-serif;
+            background: linear-gradient(135deg, #3a3a3a, #606060); /* Daha sofistike bir arka plan */
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh; /* Tam ekran yüksekliği */
+            color: #f0f0f0; /* Genel yazı rengi */
+        }
+        header {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.3); /* Hafif gölgeli arka plan */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        .logo {
+            width: 100px;
+            height: 100px;
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3_O5dd566XlQmUTJMFlpruHi4WIwFIOrmZE-2h8npkwayNsuKBisnnrgt&s=10');
+            background-size: cover;
+            background-position: center;
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        .titles {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .project-image {
+            width: 70%;
+            height: 70px;
+            background-image: url('https://i.hizliresim.com/38l841v.jpg');
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            margin-bottom: 10px;
+        }
+        .titles h2 {
+            margin: 0;
+            font-size: 20px;
+            color: #ffffff; /* Başlık rengi beyaz */
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Hafif gölge */
+        }
+        .filter-container {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #444;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        .filter-container input[type="date"] {
+            padding: 5px;
+            border: none;
+            border-radius: 5px;
+            background-color: #555;
+            color: #fff;
+        }
+        .filter-container button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #27ae60;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .filter-container button:hover {
+            background-color: #219150;
+        }
+        .transaction-container {
+            width: 100%;
+            max-width: 600px;
+            background-color: #2c2c2c;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            margin-top: 20px; /* Üstten boşluk eklenerek dikeyde daha aşağıya alındı */
+            transition: transform 0.2s;
+        }
+        .transaction-container:hover {
+            transform: translateY(-5px);
+        }
+        .transaction-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border: none;
+        }
+        .transaction-table th, .transaction-table td {
+            padding: 10px 12px;
+            text-align: left;
+            vertical-align: middle;
+            border-bottom: 1px solid #444;
+            color: #f0f0f0;
+        }
+        .transaction-table th {
+            font-weight: bold;
+            background-color: #3a3a3a;
+        }
+        .transaction-table td {
+            background-color: #2c2c2c;
+        }
+        .transaction-table th, .transaction-table td {
+            border-left: 4px solid #3a3a3a;
+        }
+        .transaction-table tr:last-child td {
+            border-bottom: none;
+        }
+        .status-pending {
+            background-color: #27ae60; /* Yeşil arka plan */
+            color: white;
+            padding: 8px;
+            border-radius: 5px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .status-completed {
+            background-color: #27ae60; /* Yeşil arka plan */
+            color: white;
+            padding: 8px;
+            border-radius: 5px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .summary-container {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #2c2c2c;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .summary-container h3 {
+            margin: 0;
+            color: #fff;
+        }
+        .summary-item {
+            background-color: #3a3a3a;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo"></div>
+        <div class="titles">
+            <div class="project-image"></div>
+            <h2>İşlem Geçmişi</h2>
+        </div>
+    </header>
+
+    <div class="filter-container">
+        <input type="date" id="start-date" name="start-date">
+        <input type="date" id="end-date" name="end-date">
+        <button>Tarihi Filtrele</button>
+    </div>
+
+    <div class="transaction-container">
+        <table class="transaction-table">
+            <tr>
+                <th>Ad Soyad:</th>
+                <td>İsmail Hakkı Acay</td>
+            </tr>
+            <tr>
+                <th>Durum:</th>
+                <td class="status-pending">Ödeme Aşamasında</td>
+            </tr>
+            <tr>
+                <th>Açıklama:</th>
+                <td>Proje Ödemesi - SecuShield: Dynamic Cyber Defense System</td>
+            </tr>
+            <tr>
+                <th>Türü:</th>
+                <td>Hizmet Bedeli</td>
+            </tr>
+            <tr>
+                <th>Kod:</th>
+                <td>187017923</td>
+            </tr>
+            <tr>
+                <th>Yöntem:</th>
+                <td>HESABA HAVALE</td>
+            </tr>
+            <tr>
+                <th>Miktar:</th>
+                <td>25.000 TRY</td>
+            </tr>
+            <tr>
+                <th>Tarih:</th>
+                <td>13.08.2024</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="summary-container">
+        <h3>Son 3 Ay İçinde Yapılan Çekim İşlemleri</h3>
+        <div class="summary-item">
+            <span>18.05.2024</span>
+            <span>10.500 TRY</span>
+        </div>
+        <div class="summary-item">
+            <span>05.06.2024</span>
+            <span>7.800 TRY</span>
+        </div>
+        <div class="summary-item">
+            <span>21.06.2024</span>
+            <span>12.300 TRY</span>
+        </div>
+        <div class="summary-item">
+            <span>02.07.2024</span>
+            <span>15.000 TRY</span>
+        </div>
+        <div class="summary-item">
+            <span>14.07.2024</span>
+            <span>4.200 TRY</span>
+        </div>
+        <div class="summary-item">
+            <span>16.07.2024</span>
+            <span>7.250 TRY</span>
+        </div>
+
+    <div class="transaction-container">
+        <table class="transaction-table">
+            <tr>
+                <th>Ad Soyad:</th>
+                <td>İsmail Hakkı Acay</td>
+            </tr>
+            <tr>
+                <th>Durum:</th>
+                <td class="status-completed">Ödeme Tamamlandı</td>
+            </tr>
+            <tr>
+                <th>Açıklama:</th>
+                <td>Proje Ödemesi - Zphishing (Kimlik Avı)</td>
+            </tr>
+            <tr>
+                <th>Türü:</th>
+                <td>Hizmet Bedeli</td>
+            </tr>
+            <tr>
+                <th>Kod:</th>
+                <td>184997516</td>
+            </tr>
+            <tr>
+                <th>Yöntem:</th>
+                <td>HESABA HAVALE</td>
+            </tr>
+            <tr>
+                <th>Miktar:</th>
+                <td>7.250 TRY</td>
+            </tr>
+            <tr>
+                <th>Tarih:</th>
+                <td>16.07.2024</td>
+            </tr>
+        </table>
+    </div>
+
+</body>
+</html>
